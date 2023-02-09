@@ -29,4 +29,5 @@ class RegisterRequest extends FormRequest
             'password_confirmation' => 'required',
         ];
     }
+
 }
