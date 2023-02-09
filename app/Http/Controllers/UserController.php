@@ -7,16 +7,23 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Services\UserService;
 
 class UserController extends Controller
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
     public function store(RegisterRequest $request)
     {
 
-        $user = new User();
-        $user->email =$request->email;
-        $user->password = Hash::make($request->password);
-        $user->save();
+        $user = $this->userService->createUser([
+            'email' => $request->email,
+            'password' => $request->password
+        ]);
 
 
         $token = $user->createToken('Token Name')->accessToken;
