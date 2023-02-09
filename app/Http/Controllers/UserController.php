@@ -1,8 +1,8 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -17,13 +17,8 @@ class UserController extends Controller
     {
         $this->userService = $userService;
     }
-    public function store(Request $request)
+    public function store(RegisterRequest $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|confirmed',
-            'password_confirmation' => 'required'
-        ]);
 
         $user = $this->userService->createUser([
             'email' => $request->email,
