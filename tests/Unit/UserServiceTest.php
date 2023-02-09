@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Services\UserService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Illuminate\Support\Facades\Hash;
 
 class UserServiceTest extends TestCase
 {
