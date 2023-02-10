@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -29,8 +30,11 @@ class UserController extends Controller
         return response()->json(['token' => $token], 201);
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
+
+        $validated = $request->validated();
+
         $credentials = $request->only(['email', 'password']);
         if (!Auth::attempt($credentials)) {
             return response()->json(['message' => 'Login failed'], 401);
