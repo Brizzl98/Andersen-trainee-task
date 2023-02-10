@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Services\UserService;
+use Illuminate\Support\Facades\Auth;
+
 
 class UserController extends Controller
 {
@@ -25,6 +27,18 @@ class UserController extends Controller
         ]);
         $token = $user->createToken('Token Name')->accessToken;
         return response()->json(['token' => $token], 201);
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->only(['email', 'password']);
+        if (!Auth::attempt($credentials)) {
+            return response()->json(['message' => 'Login failed'], 401);
+        }
+        $user = $request->user();
+        $token = $user->createToken('Token Name')->accessToken;
+
+        return response()->json(['token' => $token], 200);
     }
 }
 
