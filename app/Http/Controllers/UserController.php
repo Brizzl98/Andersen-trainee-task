@@ -19,15 +19,11 @@ class UserController extends Controller
     }
     public function store(RegisterRequest $request)
     {
-
         $user = $this->userService->createUser([
             'email' => $request->email,
             'password' => $request->password
         ]);
-
-
         $token = $user->createToken('Token Name')->accessToken;
-
         return response()->json(['token' => $token], 201);
     }
 }
