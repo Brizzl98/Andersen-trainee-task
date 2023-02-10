@@ -32,9 +32,6 @@ class UserController extends Controller
 
     public function login(LoginRequest $request)
     {
-
-        $validated = $request->validated();
-
         $credentials = $request->only(['email', 'password']);
         if (!Auth::attempt($credentials)) {
             return response()->json(['message' => 'Login failed'], 401);

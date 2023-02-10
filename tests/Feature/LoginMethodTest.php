@@ -15,7 +15,6 @@ class LoginMethodTest extends TestCase
     {
         parent::setUp();
         $this->artisan('passport:install', ['--force' => true]);
-
     }
     /**
      * Test the login method
