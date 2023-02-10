@@ -15,14 +15,7 @@ class RegisterMethodTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
-        if (env('APP_ENV') == 'testing') {
-            // Run the boot method to make sure passport is installed for testing
-            $this->artisan('passport:install', [
-                '--force' => true,
-                '--no-interaction' => true
-            ]);
-        }
+        $this->artisan('passport:install', ['--force' => true]);
 
     }
     /**
