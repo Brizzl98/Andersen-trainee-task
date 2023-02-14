@@ -1,17 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Mail\ResetPasswordMailer;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\ResetPasswordRequest;
-use App\Models\ResetPassword;
 use App\Models\User;
 use App\Services\UserService;
 use App\Services\ResetPasswordService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
 
 
 class UserController extends Controller
@@ -49,17 +46,15 @@ class UserController extends Controller
     {
         // Generate a reset token
         $resetToken = Str::random(60);
-
         // Get the user
         $user = User::where('email', $request->email)->first();
 
-        $pass_reset = $this->resetPasswordService->resetUserspass([
+        $pass_reset = $this->resetPasswordService->resetUserspassword([
             'user_id' => $user->id,
-            'token' => $resetToken
+            'token' => $resetToken,
+            'email' => $request->email
         ]);
 
-        // Send an email to the user with the reset token
-        Mail::to($request->email)->send(new ResetPasswordMailer($pass_reset));
 
         // Return a response
         return response()->json(['message' => 'An email has been sent to your email address with instructions to reset your password.']);

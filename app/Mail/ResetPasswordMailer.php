@@ -5,48 +5,39 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Config;
 
 class ResetPasswordMailer extends Mailable
 {
     use Queueable, SerializesModels;
+
+    public $token;
+    public $email;
+
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param string $token
+     * @param string $email
      */
-    public function __construct()
+    public function __construct( $reset)
     {
+        $this->token = $reset['token'];
     }
 
     /**
-     * Get the message envelope.
+     * Build the message.
      *
-     * @return \Illuminate\Mail\Mailables\Envelope
+     * @return $this
      */
-    public function envelope()
-    {
-        return new Envelope(
-            subject: 'Reset Password',
-        );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array
-     */
-    public function attachments()
-    {
-        return [];
-    }
-
     public function build()
     {
-        return $this->subject('Reset your password')->withSwiftMessage(function ($message) {
-            $message->setBody('Your reset pssword token is: ');
-        });
+
+        $subject = sprintf('Reset your password');
+
+        return $this->to($this->email)
+            ->subject($subject)
+            ->text('Your password reset token is: ' . $this->token);
     }
 }
