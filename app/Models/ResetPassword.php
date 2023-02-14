@@ -13,20 +13,8 @@ class ResetPassword extends Model
      */
     protected $table = 'reset_password';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'user_id', 'token'
+        'user_id',
+        'token'
     ];
-
-    /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = true;
-    public $id;
 }

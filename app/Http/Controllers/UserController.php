@@ -1,28 +1,27 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Mail\ResetPasswordMailer;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Models\ResetPassword;
-use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use App\Services\UserService;
+use App\Services\ResetPasswordService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Mail;
 
 
 class UserController extends Controller
 {
-    protected $userService;
+    protected $userService,$resetPasswordService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, ResetPasswordService $resetPasswordService)
     {
         $this->userService = $userService;
+        $this->resetPasswordService = $resetPasswordService;
     }
     public function store(RegisterRequest $request)
     {
@@ -48,28 +47,22 @@ class UserController extends Controller
 
     public function resetPassword(ResetPasswordRequest $request)
     {
-        $email = $request->input('email');
-        $user_id = auth()->user()->id;
-
-
-        // Generate reset token
+        // Generate a reset token
         $resetToken = Str::random(60);
 
-        // Store reset token in ResetPassword table
-        ResetPassword::create([
-            'email' => $email,
-            'token' => $resetToken,
-            'user_id' => $user_id,
+        // Get the user
+        $user = User::where('email', $request->email)->first();
+
+        $pass_reset = $this->resetPasswordService->resetUserspass([
+            'user_id' => $user->id,
+            'token' => $resetToken
         ]);
 
-        // Send email to the user with reset token
-        $mailData = [
-            'resetToken' => $resetToken,
-        ];
+        // Send an email to the user with the reset token
+        Mail::to($request->email)->send(new ResetPasswordMailer(['token'=>$pass_reset]));
 
-        Mail::to($email)->send(new ResetPasswordMail($mailData));
-
-        return response()->json(['message' => 'Reset password email sent']);
+        // Return a response
+        return response()->json(['message' => 'An email has been sent to your email address with instructions to reset your password.']);
     }
 }
 
