@@ -59,7 +59,7 @@ class UserController extends Controller
         ]);
 
         // Send an email to the user with the reset token
-        Mail::to($request->email)->send(new ResetPasswordMailer(['token'=>$pass_reset]));
+        Mail::to($request->email)->send(new ResetPasswordMailer($pass_reset));
 
         // Return a response
         return response()->json(['message' => 'An email has been sent to your email address with instructions to reset your password.']);
