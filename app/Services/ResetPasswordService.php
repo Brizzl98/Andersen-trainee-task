@@ -17,8 +17,14 @@ class ResetPasswordService
             'token' => $data["token"]
         ]);
         // Send an email to the user with the reset token
-        Mail::to($data['email'])->send(new ResetPasswordMailer($reset));
+        Mail::to($data["email"])->send(new ResetPasswordMailer($reset));
 
+//        Mail::send($data['email'])->send(new ResetPasswordMailer($reset));
+//        Mail::raw('Hi, welcome user!', function ($message) {
+//            $message->to('someemail@mail.com')
+//            ->subject('test')
+//            ->text('aaa')
+//});
         return $reset;
     }
 

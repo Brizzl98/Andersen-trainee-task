@@ -3,41 +3,54 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Config;
+
+use function Termwind\renderUsing;
+
 
 class ResetPasswordMailer extends Mailable
 {
     use Queueable, SerializesModels;
-
     public $token;
-    public $email;
-
-    /**
-     * Create a new message instance.
-     *
-     * @param string $token
-     * @param string $email
-     */
     public function __construct( $reset)
     {
         $this->token = $reset['token'];
     }
-
     /**
-     * Build the message.
+     * Get the message envelope.
      *
-     * @return $this
+     * @return \Illuminate\Mail\Mailables\Envelope
      */
-    public function build()
+    public function envelope()
     {
+        return new Envelope(
+            subject: 'Reset Password',
+        );
+    }
+    /**
+     * Get the message content definition.
+     *
+     * @return \Illuminate\Mail\Mailables\Content
+     */
+//    public function content()
+//    {
+////        $resetToken = $this->token;
+////        $message = "Your password reset token is: $resetToken";
+////
+////        $content = new Content();
+////        $content->text($message);
+////
+////        return $content;
+//    }
 
-        $subject = sprintf('Reset your password');
-
-        return $this->to($this->email)
-            ->subject($subject)
-            ->text('Your password reset token is: ' . $this->token);
+    public function build(){
+        return $this
+            ->from("my@mail.com")
+            ->view("mails.resetPassword")
+            ->subject($this->subject)
+            ->with(["token"=>$this->token]);
     }
 }
