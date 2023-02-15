@@ -30,21 +30,6 @@ class ResetPasswordMailer extends Mailable
             subject: 'Reset Password',
         );
     }
-    /**
-     * Get the message content definition.
-     *
-     * @return \Illuminate\Mail\Mailables\Content
-     */
-//    public function content()
-//    {
-////        $resetToken = $this->token;
-////        $message = "Your password reset token is: $resetToken";
-////
-////        $content = new Content();
-////        $content->text($message);
-////
-////        return $content;
-//    }
 
     public function build(){
         return $this

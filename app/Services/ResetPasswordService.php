@@ -14,17 +14,10 @@ class ResetPasswordService
         // Store the reset token in the database
         $reset = ResetPassword::create([
             'user_id' => $data["user_id"],
-            'token' => $data["token"]
+            'token' => $data["token"],
         ]);
         // Send an email to the user with the reset token
         Mail::to($data["email"])->send(new ResetPasswordMailer($reset));
-
-//        Mail::send($data['email'])->send(new ResetPasswordMailer($reset));
-//        Mail::raw('Hi, welcome user!', function ($message) {
-//            $message->to('someemail@mail.com')
-//            ->subject('test')
-//            ->text('aaa')
-//});
         return $reset;
     }
 

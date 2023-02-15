@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\UpdatePasswordRequest;
 use App\Models\User;
+use App\Services\UpdatePasswordService;
 use App\Services\UserService;
 use App\Services\ResetPasswordService;
 use Illuminate\Support\Facades\Auth;
@@ -15,13 +17,12 @@ class UserController extends Controller
 {
     protected $userService,$resetPasswordService;
 
-    public function __construct(UserService $userService, ResetPasswordService $resetPasswordService)
-    {
+    public function __construct(UserService $userService, ResetPasswordService $resetPasswordService, UpdatePasswordService $updatePasswordService){
         $this->userService = $userService;
         $this->resetPasswordService = $resetPasswordService;
+        $this->updatePasswordService=$updatePasswordService;
     }
-    public function store(RegisterRequest $request)
-    {
+    public function store(RegisterRequest $request){
         $user = $this->userService->createUser([
             'email' => $request->email,
             'password' => $request->password
@@ -30,8 +31,7 @@ class UserController extends Controller
         return response()->json(['token' => $token], 201);
     }
 
-    public function login(LoginRequest $request)
-    {
+    public function login(LoginRequest $request){
         $credentials = $request->only(['email', 'password']);
         if (!Auth::attempt($credentials)) {
             return response()->json(['message' => 'Login failed'], 401);
@@ -42,8 +42,7 @@ class UserController extends Controller
         return response()->json(['token' => $token], 200);
     }
 
-    public function resetPassword(ResetPasswordRequest $request)
-    {
+    public function resetPassword(ResetPasswordRequest $request){
         // Generate a reset token
         $resetToken = Str::random(60);
         // Get the user
@@ -54,10 +53,18 @@ class UserController extends Controller
             'token' => $resetToken,
             'email' => $request->email
         ]);
-
-
         // Return a response
         return response()->json(['message' => 'An email has been sent to your email address with instructions to reset your password.']);
+    }
+    public function UpdatePassword(UpdatePasswordRequest $request){
+        // Update the user's password using the reset password service
+        $this->updatePasswordService->updatePassword([
+            'token'=>$request->token,
+            'password'=>$request->password
+        ]);
+
+        // Return a success response
+        return response()->json(['message' => 'Password updated successfully']);
     }
 }
 
