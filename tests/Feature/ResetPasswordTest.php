@@ -31,18 +31,14 @@ class PasswordResetTest extends TestCase
             $token = $mail->token;
             return is_string($token) && strlen($token) === 60;
         });
-
         // Make a request to update the password with the token
         $newPassword = $this->faker->password();
         $response = $this->postJson('/api/reset-password-with-token', [
             'token' => $token,
             'password' => $newPassword,
         ]);
-
         // Check that the response indicates success
-//        var_dump($response);
         $response->assertSuccessful();
-//        ($response->original["message"]);
         $response->assertStatus(200);
         $response->assertJson([
             "message" => "Password updated successfully"

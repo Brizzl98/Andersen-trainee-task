@@ -10,7 +10,6 @@ class UpdatePasswordRequest extends FormRequest
     {
         return true;
     }
-
     public function rules()
     {
         return [

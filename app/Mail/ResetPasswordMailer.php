@@ -30,7 +30,6 @@ class ResetPasswordMailer extends Mailable
             subject: 'Reset Password',
         );
     }
-
     public function build(){
         return $this
             ->from("my@mail.com")
