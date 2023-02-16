@@ -14,6 +14,7 @@ class PasswordResetTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
+    private $test;
     public function test_password_reset()
     {
         // Create a test user
@@ -31,7 +32,15 @@ class PasswordResetTest extends TestCase
             $token = $mail->token;
             return is_string($token) && strlen($token) === 60;
         });
+
+        return ['token' => $token, 'user' => $user];
+    }
+    public function test_update_password(){
         // Make a request to update the password with the token
+        $result = $this->test_password_reset();
+        $token = $result['token'];
+        $user = $result['user'];
+
         $newPassword = $this->faker->password();
         $response = $this->postJson('/api/reset-password-with-token', [
             'token' => $token,

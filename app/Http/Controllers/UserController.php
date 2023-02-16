@@ -17,10 +17,9 @@ class UserController extends Controller
 {
     protected $userService,$resetPasswordService;
 
-    public function __construct(UserService $userService, ResetPasswordService $resetPasswordService, UpdatePasswordService $updatePasswordService){
+    public function __construct(UserService $userService, ResetPasswordService $resetPasswordService){
         $this->userService = $userService;
         $this->resetPasswordService = $resetPasswordService;
-        $this->updatePasswordService=$updatePasswordService;
     }
     public function store(RegisterRequest $request){
         $user = $this->userService->createUser([
@@ -58,7 +57,7 @@ class UserController extends Controller
     }
     public function UpdatePassword(UpdatePasswordRequest $request){
         // Update the user's password using the reset password service
-        $this->updatePasswordService->updatePassword([
+        $this->resetPasswordService->updatePassword([
             'token'=>$request->token,
             'password'=>$request->password
         ]);
