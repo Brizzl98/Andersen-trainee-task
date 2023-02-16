@@ -25,27 +25,29 @@ class PasswordResetTest extends TestCase
         $response = $this->postJson('/api/reset-password', [
             'email' => $user->email,
         ]);
-        Mail::assertSent(ResetPasswordMailer::class);
+        $token='';
+        Mail::assertSent(ResetPasswordMailer::class, function ( $mail) use(&$token) {
+            $mail->build();
+            $token = $mail->token;
+            return is_string($token) && strlen($token) === 60;
+        });
 
+        // Make a request to update the password with the token
+        $newPassword = $this->faker->password();
+        $response = $this->postJson('/api/reset-password-with-token', [
+            'token' => $token,
+            'password' => $newPassword,
+        ]);
 
-//        $response->assertSuccessful();
-////        echo $response;
-//        // Get the token from the response
+        // Check that the response indicates success
 //        var_dump($response);
-//        $token = $response['data']['token'];
-//
-//        // Make a request to update the password with the token
-//        $newPassword = $this->faker->password();
-//        $response = $this->postJson('/api/reset-password-with-token', [
-//            'token' => $token,
-//            'password' => $newPassword,
-//            'password_confirmation' => $newPassword,
-//        ]);
-//
-//        // Check that the response indicates success
-//        $response->assertSuccessful();
-//
-//        // Check that the user's password has been updated
-//        $this->assertTrue(Hash::check($newPassword, $user->fresh()->password));
+        $response->assertSuccessful();
+//        ($response->original["message"]);
+        $response->assertStatus(200);
+        $response->assertJson([
+            "message" => "Password updated successfully"
+        ]);
+        // Check that the user's password has been updated
+        $this->assertTrue(Hash::check($newPassword, $user->fresh()->password));
     }
 }
