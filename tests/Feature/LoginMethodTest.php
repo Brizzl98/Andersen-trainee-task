@@ -25,16 +25,13 @@ class LoginMethodTest extends TestCase
     {
         // Create a user
         $user = User::factory()->create();
-
         // Send a login request with the user's email and password
         $response = $this->json('POST', 'api/login', [
             'email' => $user->email,
             'password' => 'password'
         ]);
-
         // Assert the status code is 200
         $response->assertStatus(200);
-
         // Assert the response contains the token
         $response->assertJsonStructure([
             'token'
