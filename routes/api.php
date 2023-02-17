@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('/users', [UserController::class, 'store']);
 Route::post('/login', [UserController::class, 'login']);
-Route::post('/reset-password', [UserController::class, 'resetPassword']);
-Route::post('/reset-password-with-token', [UserController::class, 'UpdatePassword']);
+Route::post('/reset-password', [PasswordController::class, 'resetPassword']);
+Route::post('/reset-password-with-token', [PasswordController::class, 'UpdatePassword']);
 
