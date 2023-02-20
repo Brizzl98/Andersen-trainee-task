@@ -1,13 +1,8 @@
 <?php
 namespace App\Services;
 
-use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\ResetPasswordMailer;
-use App\Models\ResetPassword;
+
 
 class UpdateEmailUserService
 {
