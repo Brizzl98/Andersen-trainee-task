@@ -12,19 +12,21 @@ use Tests\TestCase;
 
 class UpdateEmailUserServiceTest extends TestCase
 {
-    use RefreshDatabase,  DatabaseMigrations;
+    use RefreshDatabase, DatabaseMigrations;
+
     public function setUp(): void
     {
         parent::setUp();
         $this->artisan('passport:install', ['--force' => true]);
     }
+
     /** @test */
     public function updateUserEmail()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
         $newEmail = 'new_email@example.com';
-        var_dump(        $user = Auth::user());
+        var_dump($user = Auth::user());
         $service = new UpdateEmailUserService();
         $service->updateUserEmail($newEmail);
 
@@ -32,6 +34,7 @@ class UpdateEmailUserServiceTest extends TestCase
             'email' => $newEmail
         ]);
     }
+
     /** @test */
     public function newCurrentEmailComparison()
     {
@@ -41,6 +44,7 @@ class UpdateEmailUserServiceTest extends TestCase
 
         $this->assertEquals("New and current emails are the same. No need to update", $result);
     }
+
     /** @test */
     public function updateAnotherUsersEmail()
     {
