@@ -50,7 +50,7 @@ class UserController extends Controller
     {
         $user = $request->user();
         $result = $this->userService->updateUserEmail($request->email, $user);
-        return response()->json(['message' => 'Your email adress successfully updated, new adress is: ' . $result], 200);
+        return response()->json(['message' => 'Your email adress successfully updated, new adress is: ' . $result->email], 200);
     }
 }
 
