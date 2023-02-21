@@ -46,7 +46,7 @@ class UserController extends Controller
         return response()->json(['token' => $token], 200);
     }
 
-    public function updateEmail(UpdateUserRequest $request)
+    public function update(UpdateUserRequest $request)
     {
         $user = $request->user();
         $result = $this->userService->updateUserEmail($request->email, $user);
