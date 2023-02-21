@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
@@ -14,5 +15,16 @@ class UserService
         ]);
 
         return $user;
+    }
+
+    public function updateUserEmail($email, $user)
+    {
+        if ($user->email === $email) {
+            // No need to update the email if it's already the same
+            return "New and current emails are the same. No need to update";
+        }
+        $user->email = $email;
+        $user->save();
+        return $user->email;
     }
 }

@@ -1,18 +1,19 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use App\Services\UpdateEmailUserService;
+use App\Services\UserService;
+use Faker\Factory as Faker;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Traits\FakerTrait;
+
 
 class UpdateEmailUserServiceTest extends TestCase
 {
-    use RefreshDatabase, DatabaseMigrations;
+    use RefreshDatabase, DatabaseMigrations, FakerTrait;
 
     public function setUp(): void
     {
@@ -24,10 +25,9 @@ class UpdateEmailUserServiceTest extends TestCase
     public function updateUserEmail()
     {
         $user = User::factory()->create();
-        $this->actingAs($user);
-        $newEmail = 'newtestemail@example.com';
-        $service = new UpdateEmailUserService();
-        $service->updateUserEmail($newEmail);
+        $newEmail = $this->fake()->email;
+        $service = new UserService();
+        $service->updateUserEmail($newEmail, $user);
         $this->assertDatabaseHas('users', [
             'email' => $newEmail
         ]);
@@ -38,9 +38,9 @@ class UpdateEmailUserServiceTest extends TestCase
     {
         $user = User::factory()->create();
         $this->actingAs($user);
-        $email = $user->email;
-        $service = new UpdateEmailUserService();
-        $result = $service->updateUserEmail($email);
+        $email =$user->email;
+        $service = new UserService();
+        $result = $service->updateUserEmail($email, $user);
         $this->assertEquals("New and current emails are the same. No need to update", $result);
     }
 }

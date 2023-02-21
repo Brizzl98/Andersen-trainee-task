@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UpdateUserRequest;
-use App\Services\UpdateEmailUserService;
 use App\Services\UserService;
 use App\Services\ResetPasswordService;
 use Illuminate\Support\Facades\Auth;
@@ -15,16 +14,14 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
-    protected $userService, $resetPasswordService, $updateEmailUserService;
+    protected $userService, $resetPasswordService;
 
     public function __construct(
         UserService $userService,
         ResetPasswordService $resetPasswordService,
-        UpdateEmailUserService $updateEmailUserService
     ) {
         $this->userService = $userService;
         $this->resetPasswordService = $resetPasswordService;
-        $this->updateEmailUserService = $updateEmailUserService;
     }
 
     public function store(RegisterRequest $request)
@@ -49,10 +46,11 @@ class UserController extends Controller
         return response()->json(['token' => $token], 200);
     }
 
-    public function updateUser(UpdateUserRequest $request)
+    public function updateEmail(UpdateUserRequest $request)
     {
-        $email = $this->updateEmailUserService->updateUserEmail($request->email);
-        return $email;
+        $user = $request->user();
+        $result = $this->userService->updateUserEmail($request->email, $user);
+        return response()->json(['message' => 'Your email adress successfully updated, new adress is: ' . $result], 200);
     }
 }
 
