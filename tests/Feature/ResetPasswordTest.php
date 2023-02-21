@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Feature;
 
 use App\Mail\ResetPasswordMailer;
@@ -15,7 +16,8 @@ class PasswordResetTest extends TestCase
     use WithFaker;
 
     private $test;
-    public function test_password_reset()
+
+    public function testPasswordReset()
     {
         // Create a test user
         $user = User::factory()->create([
@@ -26,8 +28,8 @@ class PasswordResetTest extends TestCase
         $response = $this->postJson('/api/reset-password', [
             'email' => $user->email,
         ]);
-        $token='';
-        Mail::assertSent(ResetPasswordMailer::class, function ( $mail) use(&$token) {
+        $token = '';
+        Mail::assertSent(ResetPasswordMailer::class, function ($mail) use (&$token) {
             $mail->build();
             $token = $mail->token;
             return is_string($token) && strlen($token) === 60;
@@ -35,9 +37,11 @@ class PasswordResetTest extends TestCase
 
         return ['token' => $token, 'user' => $user];
     }
-    public function test_update_password(){
+
+    public function testUpdatePassword()
+    {
         // Make a request to update the password with the token
-        $result = $this->test_password_reset();
+        $result = $this->testPasswordReset();
         $token = $result['token'];
         $user = $result['user'];
 

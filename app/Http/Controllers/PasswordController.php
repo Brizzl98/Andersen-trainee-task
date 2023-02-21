@@ -31,7 +31,7 @@ class PasswordController extends Controller
         // Return a response
         return response()->json(['message' => 'An email has been sent to your email address with instructions to reset your password.']);
     }
-    public function UpdatePassword(UpdatePasswordRequest $request){
+    public function updatePassword(UpdatePasswordRequest $request){
         // Update the user's password using the reset password service
         $this->resetPasswordService->updatePassword([
             'token'=>$request->token,

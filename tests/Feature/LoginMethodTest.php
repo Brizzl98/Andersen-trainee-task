@@ -11,11 +11,13 @@ use App\Models\User;
 class LoginMethodTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
+
     public function setUp(): void
     {
         parent::setUp();
         $this->artisan('passport:install', ['--force' => true]);
     }
+
     /**
      * Test the login method
      *
