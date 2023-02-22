@@ -7,6 +7,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Services\UserService;
 use App\Services\ResetPasswordService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -50,7 +51,27 @@ class UserController extends Controller
     {
         $user = $request->user();
         $result = $this->userService->updateUserEmail($request->email, $user);
-        return response()->json(['message' => 'Your email adress successfully updated, new adress is: ' . $result->email], 200);
+        return response()->json(['message' => 'Your email adress successfully updated, new adress is: ' . $result->email],
+            200);
+    }
+    public function getUsers(){
+        $users_list = $this->userService->getUsers();
+        // Convert array to list, for easy display
+        $users_list = implode(', ', $users_list);
+        return response()->json(['message'=>'Users: ' . $users_list ], 200);
+    }
+
+    public function getUserData(Request $request, $id){
+        // Retrieve the authenticated user from the request
+        $user = $request->user();
+        $response = $this->userService->getUserData($user, $id);
+        return $response;
+
+//        $user = $request->user();
+//        var_dump($user);
+//        $user_Data = $this->userService->getUserData($user);
+//        $user_Data = implode(', ', $user_Data);
+//        return response()->json(['message'=>'This is Your data: ', $user_Data], 200);
     }
 }
 
