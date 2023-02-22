@@ -38,7 +38,7 @@ class UpdateEmailUserServiceTest extends TestCase
     {
         $user = User::factory()->create();
         $this->actingAs($user);
-        $email =$user->email;
+        $email = $user->email;
         $service = new UserService();
         $result = $service->updateUserEmail($email, $user);
         $this->assertEquals("New and current emails are the same. No need to update", $result);

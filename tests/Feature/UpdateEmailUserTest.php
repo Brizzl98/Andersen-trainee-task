@@ -11,8 +11,7 @@ use App\Traits\FakerTrait;
 
 class UpdateEmailUserTest extends TestCase
 {
-    use RefreshDatabase, DatabaseMigrations, FakerTrait
-;
+    use RefreshDatabase, DatabaseMigrations, FakerTrait;
 
     public function setUp(): void
     {
