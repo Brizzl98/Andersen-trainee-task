@@ -46,13 +46,12 @@ class UserService
             // If the authenticated user is the same as the requested user, return the user object
             if ($user->id === $requestedUser->id) {
                 $user_Data = User::where('id', $user->id)->first();
-                return response()->json(['Your data'=> $user_Data]);
+                return response()->json(['Your data' => $user_Data]);
             } else {
                 // If the authenticated user is not the same as the requested user, return a 403 Forbidden response
                 return response()->json(['error' => 'Forbidden'], 403);
             }
         }
-
         // If the requested user was not found, return a 404 Not Found response
         return response()->json(['error' => 'User not found'], 404);
     }
