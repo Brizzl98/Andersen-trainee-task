@@ -26,6 +26,7 @@ class UserService
         }
         $user->email = $email;
         $newEmail = $user->email;
+        $user->save();
         return $newEmail;
     }
 

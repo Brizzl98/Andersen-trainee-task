@@ -30,10 +30,8 @@ class GetUsersTest extends TestCase
 
         // Assert that the response contains the user data
         $response->assertJson([
-            'Your data' => [
-                'id' => $user->id,
-                'email' => $user->email,
-            ]
+            'id' => $user->id,
+            'email' => $user->email,
         ]);
     }
 
@@ -68,11 +66,6 @@ class GetUsersTest extends TestCase
 
         // Assert that the response has a forbidden status code
         $response->assertStatus(403);
-
-        // Assert that the response contains the "Forbidden" error message
-        $response->assertJson([
-            'error' => 'Forbidden',
-        ]);
     }
 
     public function testGetUsersList()

@@ -25,6 +25,7 @@ class UpdateUserEmailTest extends TestCase
     public function updateUserEmail()
     {
         $user = User::factory()->create();
+        $this->actingAs($user);
         $newEmail = $this->fake()->email;
         $service = new UserService();
         $service->updateUserEmail($newEmail, $user);

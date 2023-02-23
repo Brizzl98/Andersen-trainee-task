@@ -25,7 +25,7 @@ class UpdateEmailUserTest extends TestCase
         $newEmail = $this->fake()->email;
         $user = User::factory()->create();
         $this->actingAs($user, 'api');
-        $response = $this->putJson('/api/users', ['email' => $newEmail]);
+        $response = $this->putJson("/api/users/{$user->id}", ['email' => $newEmail]);
         $response->assertStatus(200);
     }
 }
