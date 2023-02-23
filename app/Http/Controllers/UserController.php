@@ -51,8 +51,7 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, $id)
     {
-        $requestedUser = User::find($id);
-        $result = $this->userService->updateUserEmail($request->email, $requestedUser);
+        $result = $this->userService->updateUserEmail($request->email, User::find($id));
         return response()->json($result);
     }
 

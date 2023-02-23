@@ -22,7 +22,6 @@ class GetUsersTest extends TestCase
         // Create a user
         $user = User::factory()->create();
         $this->actingAs($user, 'api');
-        $user->save();
         // Send a GET request to the /users/{id} endpoint with the user ID
         $response = $this->get("api/users/{$user->id}");
         // Assert that the response has a successful status code
@@ -40,9 +39,9 @@ class GetUsersTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user, 'api');
         $lastId = User::max('id');
-        $non_existing_user_id = $lastId + 1;
+        $nonExistingUserId = $lastId + 1;
         // Send a GET request to the /users/{id} endpoint with a non-existing user ID
-        $response = $this->get("api/users/{$non_existing_user_id}");
+        $response = $this->get("api/users/{$nonExistingUserId}");
 
         // Assert that the response has a not found status code
         $response->assertStatus(403);

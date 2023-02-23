@@ -15,6 +15,7 @@ class GetUsersDataRequest extends FormRequest
     {
         return $this->user()->can('view', User::find($this->route('id')));
     }
+
     public function rules()
     {
         return [ ];
