@@ -32,8 +32,8 @@ class UserService
     public function getUsers()
     {
         // Get emails from users table
-        $emailList = User::select('email')->get()->pluck('email')->toArray();
-        return $emailList;
+        $usersEmails = User::all()->pluck('email')->toArray();
+        return $usersEmails;
     }
 
     public function getUserData($user, $id)

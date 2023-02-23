@@ -9,6 +9,7 @@ use App\Services\UserService;
 use App\Services\ResetPasswordService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -50,6 +51,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request)
     {
         $user = $request->user();
+//        $this->authorize('update', $user);
         $result = $this->userService->updateUserEmail($request->email, $user);
         return response()->json(['message' => 'Your email adress successfully updated, new adress is: ' . $result->email],
             200);
@@ -57,18 +59,20 @@ class UserController extends Controller
 
     public function getUsers()
     {
-        $users_list = $this->userService->getUsers();
-        // Convert array to list, for easy display
-        $users_list = implode(', ', $users_list);
-        return response()->json(['message' => 'Users: ' . $users_list], 200);
+        $usersEmails = $this->userService->getUsers();
+        return response()->json(['Users: ' => $usersEmails], 200);
     }
 
     public function getUserData(Request $request, $id)
     {
         // Retrieve the authenticated user from the request
-        $user = $request->user();
-        $response = $this->userService->getUserData($user, $id);
-        return $response;
+        $requestedUser = User::find($id);
+        if ($requestedUser) {
+            $this->authorize('view', $requestedUser);
+            $response = response()->json(User::find($id));
+            return $response;
+        }
+        return response()->json(['error' => 'User not found'], 404);
     }
 }
 
