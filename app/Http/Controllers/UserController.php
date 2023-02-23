@@ -48,13 +48,16 @@ class UserController extends Controller
         return response()->json(['token' => $token], 200);
     }
 
-    public function update(UpdateUserRequest $request)
+    public function update(UpdateUserRequest $request, $id)
     {
-        $user = $request->user();
-//        $this->authorize('update', $user);
-        $result = $this->userService->updateUserEmail($request->email, $user);
-        return response()->json(['message' => 'Your email adress successfully updated, new adress is: ' . $result->email],
-            200);
+        $requestedUser = User::find($id);
+        if ($requestedUser) {
+            $this->authorize('update', $requestedUser);
+            $result = $this->userService->updateUserEmail($request->email, $requestedUser);
+            return response()->json(['message' => 'Your email adress successfully updated, new adress is: ' . $result],
+                200);
+        }
+        return response()->json(['error' => 'User not found'], 404);
     }
 
     public function getUsers()

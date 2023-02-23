@@ -22,6 +22,6 @@ Route::post('/users', [UserController::class, 'store']);
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/reset-password', [PasswordController::class, 'resetPassword']);
 Route::post('/reset-password-with-token', [PasswordController::class, 'updatePassword']);
-Route::put('/users', [UserController::class, 'update'])->middleware('auth:api');
+Route::put('/users/{id}', [UserController::class, 'update'])->middleware('auth:api');
 Route::get('/users', [UserController::class, 'getUsers']);
 Route::get('/users/{id}', [UserController::class, 'getUserData'])->middleware('auth:api');
