@@ -11,7 +11,7 @@ use Tests\TestCase;
 use App\Traits\FakerTrait;
 
 
-class UpdateEmailUserServiceTest extends TestCase
+class UpdateUserEmailTest extends TestCase
 {
     use RefreshDatabase, DatabaseMigrations, FakerTrait;
 
