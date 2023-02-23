@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GetUsersDataRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -45,37 +46,24 @@ class UserController extends Controller
         $user = $request->user();
         $token = $user->createToken('Token Name')->accessToken;
 
-        return response()->json(['token' => $token], 200);
+        return response()->json(['token' => $token]);
     }
 
     public function update(UpdateUserRequest $request, $id)
     {
         $requestedUser = User::find($id);
-        if ($requestedUser) {
-            $this->authorize('update', $requestedUser);
-            $result = $this->userService->updateUserEmail($request->email, $requestedUser);
-            return response()->json(['message' => 'Your email adress successfully updated, new adress is: ' . $result],
-                200);
-        }
-        return response()->json(['error' => 'User not found'], 404);
+        $result = $this->userService->updateUserEmail($request->email, $requestedUser);
+        return response()->json($result);
     }
 
-    public function getUsers()
+    public function getUsers(GetUsersDataRequest $request)
     {
-        $usersEmails = $this->userService->getUsers();
-        return response()->json(['Users: ' => $usersEmails], 200);
+        return response()->json($this->userService->getUsers());
     }
 
-    public function getUserData(Request $request, $id)
+    public function getUserData(GetUsersDataRequest $request, $id)
     {
-        // Retrieve the authenticated user from the request
-        $requestedUser = User::find($id);
-        if ($requestedUser) {
-            $this->authorize('view', $requestedUser);
-            $response = response()->json(User::find($id));
-            return $response;
-        }
-        return response()->json(['error' => 'User not found'], 404);
+        return  response()->json(User::find($id));;
     }
 }
 

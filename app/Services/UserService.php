@@ -25,16 +25,14 @@ class UserService
             return "New and current emails are the same. No need to update";
         }
         $user->email = $email;
-        $newEmail = $user->email;
         $user->save();
-        return $newEmail;
+        return $email;
     }
 
     public function getUsers()
     {
         // Get emails from users table
-        $usersEmails = User::all()->pluck('email')->toArray();
-        return $usersEmails;
+        return  User::all()->pluck('email')->toArray();;
     }
 
 }

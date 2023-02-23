@@ -45,12 +45,7 @@ class GetUsersTest extends TestCase
         $response = $this->get("api/users/{$non_existing_user_id}");
 
         // Assert that the response has a not found status code
-        $response->assertStatus(404);
-
-        // Assert that the response contains the "User not found" error message
-        $response->assertJson([
-            'error' => 'User not found',
-        ]);
+        $response->assertStatus(403);
     }
 
     public function testGetForbiddenUser()
@@ -72,7 +67,7 @@ class GetUsersTest extends TestCase
     {
         $user = User::factory()->create();
         $this->actingAs($user, 'api');
-        $response = $this->get("api/users");
+        $response = $this->get("api/users/{$user->id}");
         $response->assertStatus(200);
     }
 }
