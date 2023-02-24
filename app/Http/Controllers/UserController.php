@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GetUsersDataRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Services\UserService;
 use App\Services\ResetPasswordService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -43,14 +46,23 @@ class UserController extends Controller
         $user = $request->user();
         $token = $user->createToken('Token Name')->accessToken;
 
-        return response()->json(['token' => $token], 200);
+        return response()->json(['token' => $token]);
     }
 
-    public function update(UpdateUserRequest $request)
+    public function update(UpdateUserRequest $request, $id)
     {
-        $user = $request->user();
-        $result = $this->userService->updateUserEmail($request->email, $user);
-        return response()->json(['message' => 'Your email adress successfully updated, new adress is: ' . $result->email], 200);
+        $result = $this->userService->updateUserEmail($request->email, User::find($id));
+        return response()->json($result);
+    }
+
+    public function getUsers(GetUsersDataRequest $request)
+    {
+        return response()->json($this->userService->getUsers());
+    }
+
+    public function getUserData(GetUsersDataRequest $request, $id)
+    {
+        return  response()->json(User::find($id));;
     }
 }
 

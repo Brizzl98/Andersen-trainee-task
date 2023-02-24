@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\User;
@@ -25,6 +26,13 @@ class UserService
         }
         $user->email = $email;
         $user->save();
-        return $user;
+        return $email;
     }
+
+    public function getUsers()
+    {
+        // Get emails from users table
+        return  User::all()->pluck('email')->toArray();;
+    }
+
 }

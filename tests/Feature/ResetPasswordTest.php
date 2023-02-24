@@ -45,7 +45,7 @@ class PasswordResetTest extends TestCase
         $token = $result['token'];
         $user = $result['user'];
 
-        $newPassword = $this->faker->password();
+        $newPassword = $this->faker->password($minLength = 8);
         $response = $this->postJson('/api/reset-password-with-token', [
             'token' => $token,
             'password' => $newPassword,

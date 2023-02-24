@@ -11,7 +11,7 @@ use Tests\TestCase;
 use App\Traits\FakerTrait;
 
 
-class UpdateEmailUserServiceTest extends TestCase
+class UpdateUserEmailTest extends TestCase
 {
     use RefreshDatabase, DatabaseMigrations, FakerTrait;
 
@@ -25,6 +25,7 @@ class UpdateEmailUserServiceTest extends TestCase
     public function updateUserEmail()
     {
         $user = User::factory()->create();
+        $this->actingAs($user);
         $newEmail = $this->fake()->email;
         $service = new UserService();
         $service->updateUserEmail($newEmail, $user);
@@ -38,7 +39,7 @@ class UpdateEmailUserServiceTest extends TestCase
     {
         $user = User::factory()->create();
         $this->actingAs($user);
-        $email =$user->email;
+        $email = $user->email;
         $service = new UserService();
         $result = $service->updateUserEmail($email, $user);
         $this->assertEquals("New and current emails are the same. No need to update", $result);
