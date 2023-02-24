@@ -61,9 +61,11 @@ class UserController extends Controller
 
     public function getUserData(GetUsersDataRequest $request, $id)
     {
-        return  response()->json(User::find($id));;
+        return response()->json(User::find($id));;
     }
-    public function delete(DeleteUserRequest $request){
+
+    public function delete(DeleteUserRequest $request)
+    {
         return response()->json($this->userService->delete($request->user(), self::INACTIVE));
     }
 }
