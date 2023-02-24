@@ -3,20 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GetUsersDataRequest;
+use App\Http\Requests\DeleteUserRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Services\UserService;
 use App\Services\ResetPasswordService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use Tymon\JWTAuth\Facades\JWTAuth;
-
 
 class UserController extends Controller
 {
+    const ACTIVE = 1;
+    const INACTIVE = 2;
     protected $userService, $resetPasswordService;
 
     public function __construct(
@@ -65,7 +64,7 @@ class UserController extends Controller
         return  response()->json(User::find($id));;
     }
     public function delete(DeleteUserRequest $request){
-
+        return response()->json($this->userService->delete($request->user(), self::INACTIVE));
     }
 }
 

@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Mail\DeleteMailer;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Dompdf\Dompdf;
+use Illuminate\Support\Facades\Mail;
 
 class UserService
 {
@@ -41,9 +43,10 @@ class UserService
         $user->status =$status;
         $user->save();
         $pdf = new Dompdf();
-        $pdf->loadHTML("<h1>'Status changed' . $user->status</h1>");
+        $pdf->loadHTML("<h1>User successfully deleted</h1>");
         $pdf->setPaper('A4', 'portrait');
         $pdf->render();
+        Mail::to($user->email)->send(new DeleteMailer($pdf));
         return $pdf;
     }
 }
