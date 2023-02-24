@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Dompdf\Dompdf;
 
 class UserService
 {
@@ -35,4 +36,14 @@ class UserService
         return  User::all()->pluck('email')->toArray();;
     }
 
+    public function delete($user, $status)
+    {
+        $user->status =$status;
+        $user->save();
+        $pdf = new Dompdf();
+        $pdf->loadHTML("<h1>'Status changed' . $user->status</h1>");
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->render();
+        return $pdf;
+    }
 }
