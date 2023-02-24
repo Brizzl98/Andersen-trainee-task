@@ -35,18 +35,21 @@ class UserService
     public function getUsers()
     {
         // Get emails from users table
-        return  User::all()->pluck('email')->toArray();;
+        return User::all()->pluck('email')->toArray();;
     }
 
-    public function delete($user, $status)
+    public function delete($user)
     {
-        $user->status =$status;
+        // change user status
+        $user->status = User::INACTIVE;
+        // genrate pdf
         $user->save();
         $pdf = new Dompdf();
         $pdf->loadHTML("<h1>User successfully deleted</h1>");
         $pdf->setPaper('A4', 'portrait');
         $pdf->render();
+        // send mail
         Mail::to($user->email)->send(new DeleteMailer($pdf));
-        return $pdf;
+        return "User deleted";
     }
 }

@@ -14,8 +14,6 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    const ACTIVE = 1;
-    const INACTIVE = 2;
     protected $userService, $resetPasswordService;
 
     public function __construct(
@@ -66,7 +64,7 @@ class UserController extends Controller
 
     public function delete(DeleteUserRequest $request)
     {
-        return response()->json($this->userService->delete($request->user(), self::INACTIVE));
+        return response()->json($this->userService->delete($request->user()));
     }
 }
 

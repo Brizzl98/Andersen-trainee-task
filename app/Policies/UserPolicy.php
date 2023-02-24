@@ -65,7 +65,7 @@ class UserPolicy
      */
     public function delete(User $user, User $requestedUser)
     {
-        return $user->id === $requestedUser->id && $requestedUser->status !== UserController::INACTIVE;
+        return $user->id === $requestedUser->id && $requestedUser->status == User::ACTIVE;
     }
 
     /**
