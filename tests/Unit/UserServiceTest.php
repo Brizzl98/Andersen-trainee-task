@@ -21,7 +21,7 @@ class UserServiceTest extends TestCase
     }
 
     /** @test */
-    public function it_tests_create_method()
+    public function testCreateUser()
     {
         $data = [
             'email' => 'test@example.com',

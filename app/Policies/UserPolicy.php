@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -62,9 +63,9 @@ class UserPolicy
      * @param \App\Models\User $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, User $model)
+    public function delete(User $user, User $requestedUser)
     {
-        //
+        return $user->id === $requestedUser->id && $requestedUser->status == User::ACTIVE;
     }
 
     /**

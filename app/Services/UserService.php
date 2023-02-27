@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Mail\DeleteMailer;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Dompdf\Dompdf;
+use Illuminate\Support\Facades\Mail;
 
 class UserService
 {
@@ -32,7 +35,20 @@ class UserService
     public function getUsers()
     {
         // Get emails from users table
-        return  User::all()->pluck('email')->toArray();;
+        return User::all()->pluck('email')->toArray();;
     }
 
+    public function delete($user)
+    {
+        // change user status
+        $user->status = User::INACTIVE;
+        // genrate pdf
+        $user->save();
+        $pdf = new Dompdf();
+        $pdf->loadHTML("<h1>User successfully deleted</h1>");
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->render();
+        // send mail
+        Mail::to($user->email)->send(new DeleteMailer($pdf));
+    }
 }

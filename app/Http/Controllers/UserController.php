@@ -3,17 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GetUsersDataRequest;
+use App\Http\Requests\DeleteUserRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Services\UserService;
 use App\Services\ResetPasswordService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use Tymon\JWTAuth\Facades\JWTAuth;
-
 
 class UserController extends Controller
 {
@@ -62,7 +59,18 @@ class UserController extends Controller
 
     public function getUserData(GetUsersDataRequest $request, $id)
     {
-        return  response()->json(User::find($id));;
+        return response()->json(User::find($id));
+    }
+
+    public function delete(DeleteUserRequest $request)
+    {
+        try {
+            $this->userService->delete($request->user());
+        } catch (\Exception $e) {
+            // handle exception
+            return response()->json(['status' => 'error', 'message' => 'Failed to delete user']);
+        }
+        return response()->noContent()->header('Content-Type', 'application/json');
     }
 }
 
