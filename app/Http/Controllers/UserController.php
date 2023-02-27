@@ -64,8 +64,13 @@ class UserController extends Controller
 
     public function delete(DeleteUserRequest $request)
     {
-        $this->userService->delete($request->user());
-        return response()->noContent();
+        try {
+            $this->userService->delete($request->user());
+        } catch (\Exception $e) {
+            // handle exception
+            return response()->json(['status' => 'error', 'message' => 'Failed to delete user']);
+        }
+        return response()->noContent()->header('Content-Type', 'application/json');
     }
 }
 

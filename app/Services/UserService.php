@@ -40,7 +40,6 @@ class UserService
 
     public function delete($user)
     {
-        try {
         // change user status
         $user->status = User::INACTIVE;
         // genrate pdf
@@ -51,9 +50,5 @@ class UserService
         $pdf->render();
         // send mail
         Mail::to($user->email)->send(new DeleteMailer($pdf));
-        } catch (\Exception $e) {
-            // handle exception
-            return response()->json(['status' => 'error', 'message' => 'Failed to delete user']);
-        }
     }
 }
